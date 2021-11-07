@@ -1,0 +1,311 @@
+#spiders 
+
+from numpy.core.shape_base import _block_dispatcher
+from numpy.lib.function_base import copy
+import scrapy
+import os  
+import random
+import numpy as np
+from scrapy.crawler import CrawlerProcess
+from os import path 
+
+#creating paths to directories 
+x = r"\Users\rowan\OneDrive\Documents\VectorData"
+a,b,c,d,e,f,g,h = [r"\aedes.html",r"\anopheles.html",r"\culex.html",r"\triatoma.html",r"\tick.html",r"\lice.html",r"\blackfly.html",r"\flea.html"]
+final_path = x + str(list(range(0,7)))
+a,b,c,d,e,f,g,h = '','','','','','','',''
+
+if not os.path.isdir(final_path):
+    os.makedirs(final_path)
+    print(final_path)
+
+def gizmo(eggs):
+    os.path = r"C:\Users\rowan\OneDrive\Documents\VectorData"
+    os.path = os.path[:50] 
+    os.path = os.path + str(eggs+".html")
+    
+#img name funct 
+def spam(img,eggs):
+   img = img[:5]
+   kool += 1 
+   if (img.split(".")[1] == "jpg"):
+       ext = ".jpg"
+   if (img.split(".")[1] == "png"):
+       ext = ".png"
+   if (img.split(".")[1] == "jpeg"):
+       ext = ".jpeg"
+   if (img.split(".")[1] == "bmp"):
+       ext = ".bmp"
+   img = str(img + eggs + ext)
+   
+# data miner function
+
+def miner(fDir):
+    def parse(self, response):
+        links = response.xpath("//img/@src")
+        
+        #creating paths to directories 
+        x = r"\Users\rowan\OneDrive\Documents\VectorData"
+        final_path = x + fDir 
+        final_path = ''
+
+        for link in links:
+            url = link.get()
+
+            if any(extension in url for extension in 
+            [".jpg",".gif",".bmp",".png",".jpeg"]):
+                html += """<a href="{url}"
+                target=" blank">
+                <img src="{url}" height="33%"
+                width="33%"/>
+                <a/>""".format(url=url)
+                #save img to file (file = file name(defined))
+                ITEM_PIPELINES = {'scrapy.pipelines.images.ImagesPipeline': 1}
+                IMAGES_STORE = final_path + str(eggs+".html")
+                
+            for next_page in response.css('a.next'):
+                if next_page is not None:
+                    yield response.follow(next_page, self.parse)
+
+# aedes mosquito dataminer
+class aedesSpider(scrapy.Spider):
+    name = "aedes"
+    start_urls =['https://duckduckgo.com/?q=aedes+mosquito&iax=images&ia=images',
+        'https://duckduckgo.com/?q=aedes&iar=images&iax=images&ia=images'
+        'https://duckduckgo.com/?q=tiger+mosquito&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=aedes+aegypti&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Aedes+albopictus+&iar=images&iax=images&ia=images'
+        'https://duckduckgo.com/?q=yellow+fever+mosquito&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=dengue+mosquito&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=zika+mosquito&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=lymphatic+filariasis+mosquito&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=chikungunya+mosquito&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=rift+valley+fever+mosquito&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=aedes+africanus&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Aedes+albopictus&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Aedes+japonicus&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Aedes+polynesiensis&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Aedes+taeniorhynchus&iar=images&iax=images&ia=images']
+    
+    spam(r"\aedes.html")
+
+# anopheles mosquito dataminer
+class anophelesSpider(scrapy.Spider):
+    name = "anopheles"
+    start_urls = ['https://duckduckgo.com/?q=anopheles+mosquito&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=anopheles&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=anopheles+albimanus&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Anopheles+barberi&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Anopheles+crucians&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Anopheles+darlingi&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Anopheles+dirus&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Anopheles+freeborni&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Anopheles+funestus&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Anopheles+gambiae&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Anopheles+introlatus&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Anopheles+latens&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Anopheles+punctipennis&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=anopheles+quadrimaculatus&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Anopheles+stephensi&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Anopheles+subpictus&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=malaria+mosquito&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=lymphatic+filariasis+mosquito&iar=images&iax=images&ia=images']
+
+    spam(r"\anopheles.html")
+
+# tick dataminer 
+class tickSpider(scrapy.Spider):
+    name = "tick"
+    start_urls = ['https://duckduckgo.com/?q=Dermacentor+Variabilis&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Ixodes+Scapularis&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=tick&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=tick+lyme+disease&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=hard+back+tick&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=blacklegged+tick&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Ixodes+scapularis&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=deer+tick&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Ixodes+pacificus&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Dermacentor+andersoni&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Rocky+Mountain+wood+tick&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=lone+star+tick&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Ambylomma+americanum&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Ixodes+cookei&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Gulf+Coast+tick&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Amblyomma+maculatum&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=American+dog+tick&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Rocky+Mountain+wood+tick&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Dermacentor+andersoni&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=brown+dog+tick&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Rhipicephalus+sangunineus&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=soft+tick&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=dog+tick&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Dermacentor+variabilis&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=wood+tick&iar=images&iax=images&ia=images'
+        'https://duckduckgo.com/?q=Pacific+Coast+tick&iar=images&iax=images&ia=images'
+        'https://duckduckgo.com/?q=Dermacentor+occidentalis&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Ixodes+cookei&iax=images&ia=images',
+        'https://duckduckgo.com/?q=GROUNDHOG+TICK&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=lyme+tick&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=groundhog+tick&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Amblyomma+maculatum&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Ornithodoros&iar=images&iax=images&ia=images']
+
+    spam(r"\tick.html")
+
+# culex mosquito dataminer
+class culexSpider(scrapy.Spider):
+    name = 'culex'
+    start_urls = ['https://duckduckgo.com/?q=culex&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Culex+pipiens&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Culex+hortensis&iar=images&iax=images&ia=images',
+        'https://www.gettyimages.ie/photos/culex-mosquito?phrase=culex%20mosquito&sort=mostpopular',
+        'https://www.gettyimages.ie/photos/culex-pipiens?phrase=culex%20pipiens&sort=mostpopular',
+        'https://www.bing.com/images/search?q=culex%20mosquito&qs=MM&form=QBIR&sp=1&ghc=1&pq=culex%20mo&sc=8-8&cvid=9AAD6EF4807B496CAE4F965660C0BCDC&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=culex%20&qs=n&form=QBIR&sp=-1&pq=culex%20&sc=8-6&cvid=30CD3B0D5431405791C97DE507D5559B&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=Culex+Tarsalis&form=RESTAB&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=Culex+Pipiens&form=RESTAB&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=Culex+Restuans&form=RESTAB&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=Culex+Nigripalpus&form=RESTAB&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=Culex+Salinarius&form=RESTAB&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=Culex+Territans&form=RESTAB&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=Culex+Restuans&form=RESTAB&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=Culex+Erraticus&form=RESTAB&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=Culex+SPP&form=IRBPRS&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=Culex+Tarsalis&form=RESTAB&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=Culex+Quinquefasciatus&form=RESTAB&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=Culex+Apicalis&form=IRIBEP&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=Culex+Mosquito&form=IRBPRS&first=1&tsc=ImageBasicHover']
+
+    spam(r"\culex.html")
+
+# blackfly dataminer
+class blackflySpider(scrapy.Spider):
+    name = 'blackfly'
+    start_urls = ['https://duckduckgo.com/?q=blackfly+insect&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=black+fly&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=buffalo+knat&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=turkey+knat+insect&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Parasimuliinae&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Simuliinae&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=simulinum&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Simulium+damnosum&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=cnephia&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Austrosimulium&iar=images&iax=images&ia=images',
+        'https://www.dreamstime.com/photos-images/big-black-fly.html',
+        'https://www.bing.com/images/search?q=Simulium&form=RESTAB&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=Simuliidae&form=RESTAB&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=Parasimuliinae&qs=n&form=QBIR&sp=-1&pq=parasimuliinae&sc=0-14&cvid=524B47EB98CB40CF934AE67D8C36B078&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=buffalo+gnat&form=AWIR&first=1&tsc=ImageBasicHover',
+        'https://duckduckgo.com/?q=blackfly+insect&iar=images&iax=images&ia=images']
+
+    spam(r"\blackfly.html")
+
+# flea dataminer
+class fleaSpider(scrapy.Spider):
+    name = 'flea'
+    start_urls = ['https://duckduckgo.com/?q=flea&iar=images&iax=images&ia=images',
+        'https://www.bing.com/images/search?q=oriental+rat+flea&form=HDRSC3&first=1&tsc=ImageBasicHover',
+        'https://duckduckgo.com/?q=xenospylla&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Siphonaptera&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Xenopsylla+cheopis&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=bubonic+plague+flea&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=black+plague+flea&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Pulex+irritans&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Ctenocephalides+felis&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Ctenocephalides+canis&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Xenopsylla+cheopis&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Ceratophyllus+fasciatus&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Echidnophaga+gallinacea&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=sticktight+flea&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=rat+flea&iar=images&iax=images&ia=images',
+        'https://www.shutterstock.com/search/pulex+irritans',
+        'https://www.shutterstock.com/search/siphonapter',
+        'https://www.shutterstock.com/search/xenopsylla',
+        'https://www.shutterstock.com/search/ctenocephalides',
+        'https://www.shutterstock.com/search/ctenocephalides?page=2',
+        'https://www.shutterstock.com/search/siphonapter?page=2',
+        'https://www.shutterstock.com/search/pulex+irritans?page=2',
+        'https://www.shutterstock.com/search/rat+flea',
+        'https://www.canstockphoto.com/images-photos/pulex-irritans.html',
+        'https://www.canstockphoto.com/images-photos/encephalitis.html',
+        'https://www.canstockphoto.com/search.php?search_exact=1&search_phrase=ctenocephalides',
+        'https://www.gettyimages.ie/photos/xenopsylla?phrase=xenopsylla&sort=mostpopular'
+        'https://www.bing.com/images/search?q=flea&qs=n&form=QBIR&sp=-1&pq=flea&sc=8-4&cvid=77569825ADCE4EF3AB026105611FB3CD&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=siphonaptera&form=AWIR&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=Xenopsylla&qs=n&form=QBIR&sp=-1&pq=xenopsylla&sc=8-10&cvid=C38FC31B3EF44EA2878B66EB23FD0E5C&first=1&tsc=ImageBasicHover',
+        'https://duckduckgo.com/?q=bubonic+plague+flea&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=black+plague+flea&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=pulex+irritans&iar=images&iax=images&ia=images',
+        'https://www.bing.com/images/search?q=Ctenocephalides&qs=n&form=QBIR&sp=-1&pq=ctenocephalides&sc=8-15&cvid=27748396444D4CBD8A1E9812432DA860&first=1&tsc=ImageBasicHover',
+        'https://duckduckgo.com/?q=xenopsylla+cheopis&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=ceratophyllus+fasciatus&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=echidnophaga+gallinacea&iar=images&iax=images&ia=images']
+    
+    spam(r"\flea.html")
+
+# lice dataminer
+class liceSpider(scrapy.Spider):
+    name = 'lice'
+    start_urls = ['https://duckduckgo.com/?q=Pediculus+humanus+capitis&iar=images&iax=images&ia=images',
+        'https://www.bing.com/images/search?q=Pediculus+Humanus+Corporis&form=RESTAB&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=Louse+Pediculus+Humanus&form=RESTAB&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=Pediculus+Capitis&form=RESTAB&first=1&tsc=ImageBasicHover',
+        'https://www.gettyimages.ie/photos/pediculus-corporis?family=creative&license=rf&mediatype=photography&phrase=pediculus%20corporis&sort=mostpopular',
+        'https://www.shutterstock.com/search/pediculus?kw=shutterstock&c3apidt=p11161156338&gclid=eb8154d81d65151f70cd35d6afb9a0f8&gclsrc=3p.ds&msclkid=eb8154d81d65151f70cd35d6afb9a0f8&utm_source=bing&utm_medium=cpc&utm_campaign=IE-en-Images-Brand&utm_term=shutterstock&utm_content=Brand-Generic',
+        'https://www.shutterstock.com/search/lice+microscope?pl=PPC_BNG_IE_BD-&cr=pc&c3apidt=p11161156338&gclid=eb8154d81d65151f70cd35d6afb9a0f8&gclsrc=3p.ds&msclkid=eb8154d81d65151f70cd35d6afb9a0f8&utm_source=bing&utm_medium=cpc&utm_campaign=IE-en-Images-Brand&utm_term=shutterstock&utm_content=Brand-Generic',
+        'https://www.shutterstock.com/search/lice+microscope?pl=PPC_BNG_IE_BD-&cr=pc&c3apidt=p11161156338&gclid=eb8154d81d65151f70cd35d6afb9a0f8&gclsrc=3p.ds&msclkid=eb8154d81d65151f70cd35d6afb9a0f8&utm_source=bing&utm_medium=cpc&utm_campaign=IE-en-Images-Brand&utm_term=shutterstock&utm_content=Brand-Generic&page=2',
+        'https://www.shutterstock.com/search/lice+microscope?pl=PPC_BNG_IE_BD-&cr=pc&c3apidt=p11161156338&gclid=eb8154d81d65151f70cd35d6afb9a0f8&gclsrc=3p.ds&msclkid=eb8154d81d65151f70cd35d6afb9a0f8&utm_source=bing&utm_medium=cpc&utm_campaign=IE-en-Images-Brand&utm_term=shutterstock&utm_content=Brand-Generic&page=3',
+        'https://www.shutterstock.com/search/lice+microscope?pl=PPC_BNG_IE_BD-&cr=pc&c3apidt=p11161156338&gclid=eb8154d81d65151f70cd35d6afb9a0f8&gclsrc=3p.ds&msclkid=eb8154d81d65151f70cd35d6afb9a0f8&utm_source=bing&utm_medium=cpc&utm_campaign=IE-en-Images-Brand&utm_term=shutterstock&utm_content=Brand-Generic&page=4',
+        'https://www.bing.com/images/search?q=Phthiraptera&form=HDRSC3&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=Anoplura&form=RESTAB&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=Mallophaga&form=RESTAB&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=Linognathus&form=RESTAB&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=Linognathus+Setosus&form=RESTAB&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=Linognathus+Vituli&form=RESTAB&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=Felicola+Subrostrata&form=RESTAB&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=Trichodectes&form=RESTAB&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=Linognathus+Vituli&form=RESTAB&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=anoplura&qs=n&form=QBIR&sp=-1&ghc=1&pq=anoplur&sc=8-7&cvid=BEFA1FCECE00463084F243B45377E945&first=1&tsc=ImageBasicHover']
+
+    spam(r"\lice.html")
+
+# triatoma bug dataminer
+class triatomaSpider(scrapy.Spider):
+    name = 'triatoma'
+    start_urls = ['https://duckduckgo.com/?q=triatome&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=triatome+bug&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Triatoma+dimidiata+&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=kissing+bug&iar=images&iax=images&ia=images',
+        'https://www.bing.com/images/search?q=triatominae&qs=MM&form=QBIDMH&sp=2&pq=triatome&sk=MM1&sc=8-8&cvid=CB7B2B3DAD3D41648BE4F81C5CA1B590&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=Rhodnius&form=HDRSC3&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=Kissing+Bug+Nymph&form=RESTAB&first=1&tsc=ImageBasicHover',
+        'https://duckduckgo.com/?q=Triatoma+Laporte+&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=chagas+disease+insect&iar=images&iax=images&ia=images',
+        'https://www.bing.com/images/search?q=triatoma%20protracta&qs=MM&form=QBIR&sp=1&pq=triatoma%20&sc=8-9&cvid=34FFE7520A1F4B929C1A919FB0A47881&first=1&tsc=ImageBasicHover',
+        'https://duckduckgo.com/?q=chagas+disease+insect&iar=images&iax=images&ia=images',
+        'https://www.bing.com/images/search?q=Triatoma+Dimidiata&form=RESTAB&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=Triatoma+Sanguisuga&form=RESTAB&first=1&tsc=ImageBasicHover',
+        'https://www.bing.com/images/search?q=Chagas+Disease+Kissing+Bug&form=RESTAB&first=1&tsc=ImageBasicHover',
+        'https://duckduckgo.com/?q=triatoma+infestans&iar=images&iax=images&ia=images']
+
+    spam(r"\triatoma.html")
+
+# test picture dataminer
+class testSpider(scrapy.Spider):
+    name = 'test'
+    start_urls = ['https://duckduckgo.com/?q=coccinellidae&iax=images&ia=images',
+        'https://duckduckgo.com/?q=wasp&iax=images&ia=images',
+        'https://duckduckgo.com/?q=bee&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=butterfly&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=moth&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=cockroach&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=silverfish&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=dragonfly&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=firefly&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=Toxorhynchites+&iax=images&ia=images',
+        'https://duckduckgo.com/?q=beetle&iar=images&iax=images&ia=images',
+        'https://duckduckgo.com/?q=common+house+fly&iax=images&ia=images']
+
+    spam(r"\test.html")
+
+
