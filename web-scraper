@@ -10,7 +10,7 @@ from scrapy.crawler import CrawlerProcess
 from os import path 
 
 #creating paths to directories 
-x = r"\Users\rowan\OneDrive\Documents\VectorData"
+x = #dir
 a,b,c,d,e,f,g,h = [r"\aedes.html",r"\anopheles.html",r"\culex.html",r"\triatoma.html",r"\tick.html",r"\lice.html",r"\blackfly.html",r"\flea.html"]
 final_path = x + str(list(range(0,7)))
 a,b,c,d,e,f,g,h = '','','','','','','',''
@@ -20,7 +20,7 @@ if not os.path.isdir(final_path):
     print(final_path)
 
 def gizmo(eggs):
-    os.path = r"C:\Users\rowan\OneDrive\Documents\VectorData"
+    os.path = #path
     os.path = os.path[:50] 
     os.path = os.path + str(eggs+".html")
     
@@ -45,7 +45,7 @@ def miner(fDir):
         links = response.xpath("//img/@src")
         
         #creating paths to directories 
-        x = r"\Users\rowan\OneDrive\Documents\VectorData"
+        x = #dir
         final_path = x + fDir 
         final_path = ''
 
