@@ -1,0 +1,214 @@
+# vector-born disease carrier image recognition
+
+import os
+import sys
+sys.setrecursionlimit(3000)
+import cv2
+from numpy import asarray
+from numpy import save
+import numpy as np
+import copy
+from PIL import Image
+from numpy.random import seed
+from keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard
+from keras.models import load_model
+import tensorflow as tf
+from tf import keras
+from keras import optimizers
+import random
+import datetime
+import shutil
+
+# load datasets, reshape and save to a new file
+tf.keras.preprocessing.image_dataset_from_directory(
+  # dir to images folder,
+  labels="inferred",
+  label_mode="int",
+  class_names=('anopheles','aedes','blacklegged','culex','hardback','haemagogus','test'),
+  color_mode="rgb",
+  batch_size=24,
+  image_size=(256, 256),
+  shuffle=True,
+  seed=123,
+  validation_split=0.2,
+  subset="training",
+  interpolation="bilinear",
+  follow_links=False,
+  crop_to_aspect_ratio=True
+)
+    
+# define location of dataset
+folder = # dir to images folder
+photos, labels = list(), list()
+
+# enumerate files in the directory
+for file in os.listdir(folder):
+
+   # determine class
+   output = 0.0
+   if file.endswith(r'\anopheles',r'\aedes',r'\blacklegged',r'\culex',r'\hardback',r'\haemagogus'):
+      output = 1.0
+
+   # load image
+   photo = Image.open(folder + file)
+   # convert to numpy array
+   photo = np.asarray(photo)
+   # store
+   photos.append(photo)
+   labels.append(output)
+
+# convert to a numpy arrays
+photos = asarray(photos)
+labels = asarray(labels)
+print(photos.shape, labels.shape)
+# save the reshaped photos
+save('disease_carriers_photos.npy', photos)
+save('disease_carriers_labels.npy', labels)
+
+# create directories
+dataset_home = # dir to folder,
+subdirs = [r'\train']
+
+for subdir in subdirs:
+   # create label subdirectories
+   labeldirs = [r'\anopheles',r'\aedes',r'\blacklegged',r'\culex',r'\hardback',r'\haemagogus']
+   
+   for labldir in labeldirs:
+      newdir = dataset_home + subdir + labldir
+      os.makedirs(newdir, exist_ok=True)
+
+
+# seed random number generator
+seed(1)
+
+# copy training dataset images into subdirectories
+src_directory = r'\train'
+for file in os.listdir(src_directory):
+    src = src_directory + file
+    dst_dir = r'\train'
+
+    if file.endswith('anopheles'):
+      dst = dataset_home + dst_dir + r'\anopheles'  + file
+      shutil.copyfile(src, dst)
+
+    elif file.endswith('aedes'):
+      dst = dataset_home + dst_dir + r'\aedes'  + file
+      shutil.copyfile(src, dst)
+
+    elif file.endswith('blacklegged'):
+      dst = dataset_home + dst_dir + r'\blacklegged' + file
+      shutil.copyfile(src, dst)
+
+    elif file.endswith('culex'):
+      dst = dataset_home + dst_dir + r'\culex' + file
+      shutil.copyfile(src, dst)
+
+    elif file.endswith('hardback'):
+      dst = dataset_home + dst_dir + r'\hardback' + file
+      shutil.copyfile(src, dst)
+
+    elif file.endswith('haemagogus'):
+      dst = dataset_home + dst_dir + r'\haemagogus' + file
+      shutil.copyfile(src, dst)
+
+# Adam optimiser
+keras.optimizers.Adam(
+   learning_rate = 0.001, 
+   beta_1 = 0.9, 
+   beta_2 = 0.999, 
+   epsilon=1e-08,
+   amsgrad = False
+)
+
+# Early Stopping
+tf.keras.callbacks.EarlyStopping(
+    monitor="val_loss",
+    min_delta=0,
+    patience=5,
+    verbose=0,
+    mode="auto",
+    baseline=None,
+    restore_best_weights=True,
+)
+
+# labelled data
+yyy = # dir to labelled data
+
+
+# Model Checkpoint
+tf.keras.callbacks.ModelCheckpoint(
+    # dir to checkpoint,
+    monitor="val_loss", 
+    verbose=1,
+    save_best_only=True,
+    save_weights_only=False,
+    mode="auto",
+    save_freq="epoch",
+    options=None,
+)
+
+# TensorBoard visualisations of data
+tf.keras.callbacks.TensorBoard(
+    log_dir= # dir to tensorlog,
+    histogram_freq=0,
+    write_graph=True,
+    write_images=True,
+    write_steps_per_second=True,
+    update_freq="batch",
+    profile_batch=2,
+    embeddings_freq=0,
+    embeddings_metadata=None
+)
+
+# Precision metrics
+tf.keras.metrics.Precision(
+    thresholds=0.80, 
+    top_k=None, 
+    class_id=None, 
+    name=None, 
+    dtype=None
+)
+
+# ResNet neural network
+tf.keras.applications.ResNet152(
+    include_top=True,
+    weights=None,
+    input_tensor=None,
+    input_shape=None,
+    pooling=None,
+    classes=8,
+    classifier_activation="softmax",
+)
+
+cllbck = EarlyStopping, ModelCheckpoint, TensorBoard
+
+#compile model
+compile(
+   optimizer = keras.optimizers.Adam,
+   loss = tf.keras.applications.InceptionResNetV2, 
+   metrics = tf.keras.metrics.Precision, 
+   loss_weights = None, 
+   sample_weight_mode = None, 
+   weighted_metrics = None, 
+   target_tensors = None
+)
+
+# Model fit 1.0
+keras.fit(
+    tf.keras.applications.ResNet152, 
+    x = # dir to train images,
+    y = yyy,
+    batch_size = 32, 
+    epochs = 150,
+    verbose = 1,
+    callbacks = cllbck,
+    view_metrics = tf.keras.metrics.Precision, 
+    validation_split = 0.25, 
+    validation_data = (x_val, y_val),
+    shuffle = TRUE, 
+    class_weight = TRUE, 
+    sample_weight = NULL,
+    initial_epoch = 0, 
+    steps_per_epoch = NULL, 
+    validation_steps = NULL
+)
