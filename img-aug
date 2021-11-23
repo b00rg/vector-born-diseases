@@ -11,9 +11,9 @@ from skimage.util import random_noise
 from PIL import Image, ImageFilter
 import glob
 
-old_folder = r"C:\Users\rowan\Downloads\triatoma-data"
-new_folder = r"C:\Users\rowan\Downloads\vector-data-aug\triatoma-aug\%s"
-no_img_aug = 36371
+old_folder = r"C:#path"
+new_folder = r"C:#path\%s"
+no_img_aug = 0
 
 def Gamma1(image):
     return adjust_gamma(image,0.999999,1.01)
