@@ -18,13 +18,14 @@ from keras import optimizers
 import random
 import datetime
 import shutil
+from tensorflow.keras.preprocessing import image_dataset_from_directory
 
 # load datasets, reshape and save to a new file
 tf.keras.preprocessing.image_dataset_from_directory(
-  # dir to images folder,
+  r"#dir",
   labels="inferred",
   label_mode="int",
-  class_names=('anopheles','aedes','blacklegged','culex','hardback','haemagogus','test'),
+  class_names=['anopheles','aedes','tick','culex','blackfly','triatoma'],
   color_mode="rgb",
   batch_size=24,
   image_size=(256, 256),
@@ -37,79 +38,19 @@ tf.keras.preprocessing.image_dataset_from_directory(
   crop_to_aspect_ratio=True
 )
     
-# define location of dataset
-folder = # dir to images folder
-photos, labels = list(), list()
-
-# enumerate files in the directory
-for file in os.listdir(folder):
-
-   # determine class
-   output = 0.0
-   if file.endswith(r'\anopheles',r'\aedes',r'\blacklegged',r'\culex',r'\hardback',r'\haemagogus'):
-      output = 1.0
-
-   # load image
-   photo = Image.open(folder + file)
-   # convert to numpy array
-   photo = np.asarray(photo)
-   # store
-   photos.append(photo)
-   labels.append(output)
-
-# convert to a numpy arrays
-photos = asarray(photos)
-labels = asarray(labels)
-print(photos.shape, labels.shape)
-# save the reshaped photos
-save('disease_carriers_photos.npy', photos)
-save('disease_carriers_labels.npy', labels)
-
-# create directories
-dataset_home = # dir to folder,
-subdirs = [r'\train']
-
-for subdir in subdirs:
-   # create label subdirectories
-   labeldirs = [r'\anopheles',r'\aedes',r'\blacklegged',r'\culex',r'\hardback',r'\haemagogus']
-   
-   for labldir in labeldirs:
-      newdir = dataset_home + subdir + labldir
-      os.makedirs(newdir, exist_ok=True)
-
-
-# seed random number generator
-seed(1)
-
-# copy training dataset images into subdirectories
-src_directory = r'\train'
-for file in os.listdir(src_directory):
-    src = src_directory + file
-    dst_dir = r'\train'
-
-    if file.endswith('anopheles'):
-      dst = dataset_home + dst_dir + r'\anopheles'  + file
-      shutil.copyfile(src, dst)
-
-    elif file.endswith('aedes'):
-      dst = dataset_home + dst_dir + r'\aedes'  + file
-      shutil.copyfile(src, dst)
-
-    elif file.endswith('blacklegged'):
-      dst = dataset_home + dst_dir + r'\blacklegged' + file
-      shutil.copyfile(src, dst)
-
-    elif file.endswith('culex'):
-      dst = dataset_home + dst_dir + r'\culex' + file
-      shutil.copyfile(src, dst)
-
-    elif file.endswith('hardback'):
-      dst = dataset_home + dst_dir + r'\hardback' + file
-      shutil.copyfile(src, dst)
-
-    elif file.endswith('haemagogus'):
-      dst = dataset_home + dst_dir + r'\haemagogus' + file
-      shutil.copyfile(src, dst)
+# changing of data into readable files
+train_ds = image_dataset_from_directory(
+    directory='training_data/',
+    labels='inferred',
+    label_mode='categorical',
+    batch_size=32,
+    image_size=(256, 256))
+validation_ds = image_dataset_from_directory(
+    directory='validation_data/',
+    labels='inferred',
+    label_mode='categorical',
+    batch_size=32,
+    image_size=(256, 256))
 
 # Adam optimiser
 keras.optimizers.Adam(
@@ -131,13 +72,10 @@ tf.keras.callbacks.EarlyStopping(
     restore_best_weights=True,
 )
 
-# labelled data
-yyy = # dir to labelled data
-
 
 # Model Checkpoint
 tf.keras.callbacks.ModelCheckpoint(
-    # dir to checkpoint,
+    r"C:\#dir\checkpoint",
     monitor="val_loss", 
     verbose=1,
     save_best_only=True,
@@ -149,7 +87,7 @@ tf.keras.callbacks.ModelCheckpoint(
 
 # TensorBoard visualisations of data
 tf.keras.callbacks.TensorBoard(
-    log_dir= # dir to tensorlog,
+    log_dir=r"#dir\tensorLog",
     histogram_freq=0,
     write_graph=True,
     write_images=True,
@@ -180,12 +118,13 @@ tf.keras.applications.ResNet152(
     classifier_activation="softmax",
 )
 
-cllbck = EarlyStopping, ModelCheckpoint, TensorBoard
+#accuracy metric
+tf.keras.metrics.Accuracy(name="accuracy", dtype=None)
 
 #compile model
 compile(
    optimizer = keras.optimizers.Adam,
-   loss = tf.keras.applications.InceptionResNetV2, 
+   loss = tf.keras.applications.ResNetV2, 
    metrics = tf.keras.metrics.Precision, 
    loss_weights = None, 
    sample_weight_mode = None, 
@@ -196,13 +135,13 @@ compile(
 # Model fit 1.0
 keras.fit(
     tf.keras.applications.ResNet152, 
-    x = # dir to train images,
-    y = yyy,
+    x = #train,
+    y = #test,
     batch_size = 32, 
     epochs = 150,
     verbose = 1,
-    callbacks = cllbck,
-    view_metrics = tf.keras.metrics.Precision, 
+    callbacks = [EarlyStopping(), ModelCheckpoint(), TensorBoard()],
+    view_metrics = [tf.keras.metrics.Precision(), tf.keras.metrics.Accuracy()], 
     validation_split = 0.25, 
     validation_data = (x_val, y_val),
     shuffle = TRUE, 
@@ -212,3 +151,4 @@ keras.fit(
     steps_per_epoch = NULL, 
     validation_steps = NULL
 )
+
