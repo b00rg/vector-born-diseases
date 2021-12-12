@@ -27,7 +27,7 @@ from keras import optimisers
 
 # validation
 val = tf.keras.preprocessing.image_dataset_from_directory(
-  "/Users/Emma/Downloads/testing-images",
+  "/testing-images",
   labels="inferred",
   label_mode=None,
   class_names=['aedes',
@@ -51,7 +51,7 @@ val = tf.keras.preprocessing.image_dataset_from_directory(
 
 # target data validation
 train_test = tf.keras.preprocessing.image_dataset_from_directory(
-  "/Users/Emma/Downloads/testing-images",
+  "/testing-images",
   labels="inferred",
   label_mode=None,
   class_names=['aedes',
@@ -75,7 +75,7 @@ train_test = tf.keras.preprocessing.image_dataset_from_directory(
 
 # target data train
 val_test = tf.keras.preprocessing.image_dataset_from_directory(
-  "/Users/Emma/Downloads/testing-images",
+  "/testing-images",
   labels="inferred",
   label_mode=None,
   class_names=['aedes',
@@ -110,7 +110,7 @@ es = tf.keras.callbacks.EarlyStopping(
 
 # Model Checkpoint
 mc = tf.keras.callbacks.ModelCheckpoint(
-    filepath="/Users/Emma/Downloads/vector-data-aug/checkpoint",
+    filepath="/checkpoint",
     monitor="val_loss",
     verbose=1,
     save_best_only=True,
@@ -122,7 +122,7 @@ mc = tf.keras.callbacks.ModelCheckpoint(
 
 # TensorBoard visualisations of data
 tb = tf.keras.callbacks.TensorBoard(
-    log_dir=r"/Users/Emma/Downloads/vector-data-aug/tensorLog",
+    log_dir=r"/tensorLog",
     histogram_freq=0,
     write_graph=True,
     write_images=True,
