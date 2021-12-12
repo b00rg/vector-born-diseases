@@ -27,7 +27,7 @@ from keras import optimisers
 
 # validation
 val = tf.keras.preprocessing.image_dataset_from_directory(
-  "/testing-images",
+  "/images",
   labels="inferred",
   label_mode=None,
   class_names=['aedes',
@@ -51,7 +51,7 @@ val = tf.keras.preprocessing.image_dataset_from_directory(
 
 # target data validation
 train_test = tf.keras.preprocessing.image_dataset_from_directory(
-  "/testing-images",
+  "/images",
   labels="inferred",
   label_mode=None,
   class_names=['aedes',
@@ -75,7 +75,7 @@ train_test = tf.keras.preprocessing.image_dataset_from_directory(
 
 # target data train
 val_test = tf.keras.preprocessing.image_dataset_from_directory(
-  "/testing-images",
+  "/images",
   labels="inferred",
   label_mode=None,
   class_names=['aedes',
