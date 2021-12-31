@@ -1,260 +1,123 @@
-
-import numpy as np
-import os
-import sys
-sys,setrecursionlimit(3000)
+import keras
+from tensorflow.keras.preprocessing import image_dataset_from_directory
+from numpy import asarray,save
+import tensorflow as tf
 from keras.preprocessing.image import ImageDataGenerator
 from keras import backend as K
 import keras
 from keras.models import Sequential, Model,load_model
-from keras.optimizers import SGD
 from keras.callbacks import EarlyStopping,ModelCheckpoint
 from keras.layers import Input, Add, Dense, Activation, ZeroPadding2D, BatchNormalization, Flatten, Conv2D, AveragePooling2D, MaxPooling2D, GlobalMaxPooling2D,MaxPool2D
 from keras.preprocessing import image
 from keras.initializers import glorot_uniform
-import random
-import datetime
 from tensorflow.keras.preprocessing import image_dataset_from_directory
 from numpy import asarray,save
 from keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard
 from keras.models import load_model
 import tensorflow as tf
-from keras import optimisers
+import cv2
+import numpy as np
+import os
+from keras.preprocessing.image import ImageDataGenerator
+import tensorflow.keras.backend as K
+import keras
+from keras.models import Sequential, Model,load_model
+from keras.callbacks import EarlyStopping,ModelCheckpoint
+from keras.layers import Input, Add, Dense, Activation, ZeroPadding2D, BatchNormalization, Flatten, Conv2D, AveragePooling2D, MaxPooling2D, GlobalMaxPooling2D,MaxPool2D
+from keras.preprocessing import image
+from keras.initializers import glorot_uniform
+import random
 
-# vector-born disease carrier image recognition
 
-# load datasets, reshape and save to a new file
 
-# validation
-val = tf.keras.preprocessing.image_dataset_from_directory(
-  "/images",
-  labels="inferred",
-  label_mode=None,
-  class_names=['aedes',
-               'anopheles',
-               'blackfly',
-               'culex',
-               'flea',
-               'tick',
-               'triatoma'],
-  color_mode="rgb",
-  batch_size=32,
-  image_size=(224, 224),
-  shuffle=True,
-  seed=123,
-  validation_split=0.2,
-  subset="validation",
-  interpolation="bilinear",
-  follow_links=False,
-  crop_to_aspect_ratio=True
+tf.keras.optimizers.Adam(
+    learning_rate=0.0001,
+    beta_1=0.9,
+    beta_2=0.999,
+    epsilon=1e-07,
+    amsgrad=False,
+    name="Adam"
 )
-
-# target data validation
-train_test = tf.keras.preprocessing.image_dataset_from_directory(
-  "/images",
-  labels="inferred",
-  label_mode=None,
-  class_names=['aedes',
-               'anopheles',
-               'blackfly',
-               'culex',
-               'flea',
-               'tick',
-               'triatoma'],
-  color_mode="rgb",
-  batch_size=32,
-  image_size=(224, 224),
-  shuffle=False,
-  seed=123,
-  validation_split=0.2,
-  subset="training",
-  interpolation="bilinear",
-  follow_links=False,
-  crop_to_aspect_ratio=True
-)
-
-# target data train
-val_test = tf.keras.preprocessing.image_dataset_from_directory(
-  "/images",
-  labels="inferred",
-  label_mode=None,
-  class_names=['aedes',
-               'anopheles',
-               'blackfly',
-               'culex',
-               'flea',
-               'tick',
-               'triatoma'],
-  color_mode="rgb",
-  batch_size=32,
-  image_size=(224, 224),
-  shuffle=False,
-  seed=123,
-  validation_split=0.2,
-  subset="validation",
-  interpolation="bilinear",
-  follow_links=False,
-  crop_to_aspect_ratio=True
-)
-
-# Early Stopping
-es = tf.keras.callbacks.EarlyStopping(
-    monitor="val_loss",
-    min_delta=0,
-    patience=20,
-    verbose=0,
-    mode="auto",
-    baseline=None,
-    restore_best_weights=True,
-)
-
 # Model Checkpoint
 mc = tf.keras.callbacks.ModelCheckpoint(
-    filepath="/checkpoint",
+    filepath="/Users/***/Desktop/epoch-data/checkpoint",
     monitor="val_loss",
     verbose=1,
     save_best_only=True,
-    save_weights_only=False,
+    save_weights_only=True,
     mode="auto",
     save_freq="epoch",
     options=None,
 )
 
-# TensorBoard visualisations of data
-tb = tf.keras.callbacks.TensorBoard(
-    log_dir=r"/tensorLog",
-    histogram_freq=0,
-    write_graph=True,
-    write_images=True,
-    write_steps_per_second=True,
-    update_freq="batch",
-    profile_batch=2,
-    embeddings_freq=0,
-    embeddings_metadata=None
+tf.keras.metrics.AUC(
+    num_thresholds=200,
+    curve="ROC",
+    summation_method="interpolation",
+    name="AUC",
+    dtype=None,
+    thresholds=None,
+    multi_label=True,
+    num_labels=7,
+    label_weights=None,
+    from_logits=False,
 )
 
-# Precision metrics
-pm = tf.keras.metrics.Precision(
-    thresholds=0.80,
-    top_k=None,
-    class_id=None,
-    name=None,
-    dtype=None
+es = tf.keras.callbacks.EarlyStopping(
+    monitor="val_loss",
+    min_delta=0,
+    patience=2,
+    verbose=1,
+    mode="min",
+    baseline=None,
+    restore_best_weights=True
 )
 
-def identity_block(input_tensor, kernel_size, filters, stage, block):   
-    eps = 1.1e-5
-    nb_filter1, nb_filter2, nb_filter3 = filters
-    conv_name_base = 'res' + str(stage) + block + '_branch'
-    bn_name_base = 'bn' + str(stage) + block + '_branch'
-    scale_name_base = 'scale' + str(stage) + block + '_branch'
+tf.keras.losses.Poisson(reduction="auto", name="poisson")
 
-    x = Convolution2D(nb_filter1, 1, 1, name=conv_name_base + '2a', bias=False)(input_tensor)
-    x = BatchNormalization(epsilon=eps, axis=bn_axis, name=bn_name_base + '2a')(x)
-    x = Scale(axis=bn_axis, name=scale_name_base + '2a')(x)
-    x = Activation('relu', name=conv_name_base + '2a_relu')(x)
+model = tf.keras.applications.ResNet50V2(classes=7,
+                                         weights='/Users/***/Desktop/epoch-data/checkpoint',)
+# model.summary()
 
-    x = ZeroPadding2D((1, 1), name=conv_name_base + '2b_zeropadding')(x)
-    x = Convolution2D(nb_filter2, kernel_size, kernel_size,
-                      name=conv_name_base + '2b', bias=False)(x)
-    x = BatchNormalization(epsilon=eps, axis=bn_axis, name=bn_name_base + '2b')(x)
-    x = Scale(axis=bn_axis, name=scale_name_base + '2b')(x)
-    x = Activation('relu', name=conv_name_base + '2b_relu')(x)
+model.compile(loss='categorical_crossentropy',
+              optimizer='Adam',
+              metrics=["AUC","accuracy"])
 
-    x = Convolution2D(nb_filter3, 1, 1, name=conv_name_base + '2c', bias=False)(x)
-    x = BatchNormalization(epsilon=eps, axis=bn_axis, name=bn_name_base + '2c')(x)
-    x = Scale(axis=bn_axis, name=scale_name_base + '2c')(x)
+for x in range(100):
+    int = random.randint(2,123)
 
-    x = merge([x, input_tensor], mode='sum', name='res' + str(stage) + block)
-    x = Activation('relu', name='res' + str(stage) + block + '_relu')(x)
-
-    return X
-
-def conv_block(input_tensor, kernel_size, filters, stage, block, strides=(2, 2)):
+    # data
+    test = tf.keras.preprocessing.image_dataset_from_directory(
+      "/Users/***/Desktop/training",
+      labels="inferred",
+      label_mode="categorical",
+      color_mode="rgb",
+      batch_size=32,
+      image_size=(224, 224),
+      shuffle=True,
+      seed=int,
+      interpolation="bilinear",
+      follow_links=False,
+      crop_to_aspect_ratio=True
+    )
    
-    eps = 1.1e-5
-    nb_filter1, nb_filter2, nb_filter3 = filters
-    conv_name_base = 'res' + str(stage) + block + '_branch'
-    bn_name_base = 'bn' + str(stage) + block + '_branch'
-    scale_name_base = 'scale' + str(stage) + block + '_branch'
-
-    x = Convolution2D(nb_filter1, 1, 1, subsample=strides,
-                      name=conv_name_base + '2a', bias=False)(input_tensor)
-    x = BatchNormalization(epsilon=eps, axis=bn_axis, name=bn_name_base + '2a')(x)
-    x = Scale(axis=bn_axis, name=scale_name_base + '2a')(x)
-    x = Activation('relu', name=conv_name_base + '2a_relu')(x)
-
-    x = ZeroPadding2D((1, 1), name=conv_name_base + '2b_zeropadding')(x)
-    x = Convolution2D(nb_filter2, kernel_size, kernel_size,
-                      name=conv_name_base + '2b', bias=False)(x)
-    x = BatchNormalization(epsilon=eps, axis=bn_axis, name=bn_name_base + '2b')(x)
-    x = Scale(axis=bn_axis, name=scale_name_base + '2b')(x)
-    x = Activation('relu', name=conv_name_base + '2b_relu')(x)
-
-    x = Convolution2D(nb_filter3, 1, 1, name=conv_name_base + '2c', bias=False)(x)
-    x = BatchNormalization(epsilon=eps, axis=bn_axis, name=bn_name_base + '2c')(x)
-    x = Scale(axis=bn_axis, name=scale_name_base + '2c')(x)
-
-    shortcut = Convolution2D(nb_filter3, 1, 1, subsample=strides,
-                             name=conv_name_base + '1', bias=False)(input_tensor)
-    shortcut = BatchNormalization(epsilon=eps, axis=bn_axis, name=bn_name_base + '1')(shortcut)
-    shortcut = Scale(axis=bn_axis, name=scale_name_base + '1')(shortcut)
-
-    x = merge([x, shortcut], mode='sum', name='res' + str(stage) + block)
-    x = Activation('relu', name='res' + str(stage) + block + '_relu')(x)
-    return x
-
-def resnet152_model(weights_path=None):
-    eps = 1.1e-5
-
-    # Handle Dimension Ordering for different backends
-    global bn_axis
-    if K.image_dim_ordering() == 'tf':
-      bn_axis = 3
-      img_input = Input(shape=(224, 224, 3), name='data')
-    else:
-      bn_axis = 1
-      img_input = Input(shape=(3, 224, 224), name='data')
-            
-    x = ZeroPadding2D((3, 3), name='conv1_zeropadding')(img_input)
-    x = Convolution2D(64, 7, 7, subsample=(2, 2), name='conv1', bias=False)(x)
-    x = BatchNormalization(epsilon=eps, axis=bn_axis, name='bn_conv1')(x)
-    x = Scale(axis=bn_axis, name='scale_conv1')(x)
-    x = Activation('relu', name='conv1_relu')(x)
-    x = MaxPooling2D((3, 3), strides=(2, 2), name='pool1')(x)
-
-    x = conv_block(x, 3, [64, 64, 256], stage=2, block='a', strides=(1, 1))
-    x = identity_block(x, 3, [64, 64, 256], stage=2, block='b')
-    x = identity_block(x, 3, [64, 64, 256], stage=2, block='c')
-
-    x = conv_block(x, 3, [128, 128, 512], stage=3, block='a')
-    for i in range(1,8):
-      x = identity_block(x, 3, [128, 128, 512], stage=3, block='b'+str(i))
-
-    x = conv_block(x, 3, [256, 256, 1024], stage=4, block='a')
-    for i in range(1,36):
-      x = identity_block(x, 3, [256, 256, 1024], stage=4, block='b'+str(i))
-
-    x = conv_block(x, 3, [512, 512, 2048], stage=5, block='a')
-    x = identity_block(x, 3, [512, 512, 2048], stage=5, block='b')
-    x = identity_block(x, 3, [512, 512, 2048], stage=5, block='c')
-
-    x_fc = AveragePooling2D((7, 7), name='avg_pool')(x)
-    x_fc = Flatten()(x_fc)
-    x_fc = Dense(1000, activation='softmax', name='fc1000')(x_fc)
-
-    model = Model(img_input, x_fc)
-    
-    model.compile(optimizer=Adam(learning_rate=0.0001),
-              loss='sparse_categorical_crossentropy',
-              metrics=[tb,mc,es,pm])
-    
-    model.fit_generator(x=train_test,
-                    validation_data=(val, val_test),
-                    batch_size = 32,
-                    shuffle=True,
-                    epochs=150,
-                    verbose=1,
-                    callbacks=[tb,mc,es,pm])
-    return model
-
+    val = tf.keras.preprocessing.image_dataset_from_directory(
+      "/Users/***/Desktop/validation",
+      labels="inferred",
+      label_mode="categorical",
+      color_mode="rgb",
+      batch_size=32,
+      image_size=(224, 224),
+      shuffle=True,
+      seed=int,
+      interpolation="bilinear",
+      follow_links=False,
+      crop_to_aspect_ratio=True
+    )
+   
+    H = model.fit(test,
+                  validation_data=val,
+                  epochs=1,
+                  shuffle=True,
+                  verbose=1,
+                  callbacks=[mc,tb,es])
