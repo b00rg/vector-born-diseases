@@ -1,3 +1,5 @@
+
+
 import keras
 from tensorflow.keras.preprocessing import image_dataset_from_directory
 from numpy import asarray,save
@@ -26,21 +28,37 @@ from keras.callbacks import EarlyStopping,ModelCheckpoint
 from keras.layers import Input, Add, Dense, Activation, ZeroPadding2D, BatchNormalization, Flatten, Conv2D, AveragePooling2D, MaxPooling2D, GlobalMaxPooling2D,MaxPool2D
 from keras.preprocessing import image
 from keras.initializers import glorot_uniform
-import random
 
-
-
-tf.keras.optimizers.Adam(
-    learning_rate=0.0001,
-    beta_1=0.9,
-    beta_2=0.999,
-    epsilon=1e-07,
-    amsgrad=False,
-    name="Adam"
+# data
+test = tf.keras.preprocessing.image_dataset_from_directory(
+  "/Users/Emma/Desktop/training",
+  labels="inferred",
+  label_mode="categorical",
+  color_mode="rgb",
+  batch_size=32,
+  image_size=(299, 299),
+  shuffle=False,
+  seed=123,
+  interpolation="bilinear",
+  follow_links=False,
+  crop_to_aspect_ratio=True
+)
+val = tf.keras.preprocessing.image_dataset_from_directory(
+  "/Users/Emma/Desktop/validation",
+  labels="inferred",
+  label_mode="categorical",
+  color_mode="rgb",
+  batch_size=32,
+  image_size=(224, 224),
+  shuffle=False,
+  seed=123,
+  interpolation="bilinear",
+  follow_links=False,
+  crop_to_aspect_ratio=True
 )
 # Model Checkpoint
 mc = tf.keras.callbacks.ModelCheckpoint(
-    filepath="/Users/***/Desktop/epoch-data/checkpoint",
+    filepath="/Users/Emma/Desktop/epoch-data/checkpoint",
     monitor="val_loss",
     verbose=1,
     save_best_only=True,
@@ -65,59 +83,53 @@ tf.keras.metrics.AUC(
 
 es = tf.keras.callbacks.EarlyStopping(
     monitor="val_loss",
-    min_delta=0,
-    patience=2,
+    min_delta=0.01,
+    patience=1,
     verbose=1,
-    mode="min",
+    mode="auto",
     baseline=None,
     restore_best_weights=True
 )
 
 tf.keras.losses.Poisson(reduction="auto", name="poisson")
 
-model = tf.keras.applications.ResNet50V2(classes=7,
-                                         weights='/Users/***/Desktop/epoch-data/checkpoint',)
+# TensorBoard visualisations of data
+tb = tf.keras.callbacks.TensorBoard(
+    log_dir=r"/Users/Emma/Desktop/epoch-data/tensorLog",
+    histogram_freq=0,
+    write_graph=True,
+    write_images=True,
+    write_steps_per_second=True,
+    update_freq="batch",
+    profile_batch=1,
+    embeddings_freq=0,
+    embeddings_metadata=None
+)
+
+# TensorBoard visualisations of data
+tb = tf.keras.callbacks.TensorBoard(
+    log_dir=r"/Users/Emma/Downloads/vector-data-aug/tensorLog",
+    histogram_freq=0,
+    write_graph=True,
+    write_images=True,
+    write_steps_per_second=True,
+    update_freq="batch",
+    profile_batch=2,
+    embeddings_freq=0,
+    embeddings_metadata=None
+)
+
+
+model = tf.keras.applications.Xception(classes=7,
+                                       weights=None)
+
 # model.summary()
 
 model.compile(loss='categorical_crossentropy',
-              optimizer='Adam',
-              metrics=["AUC","accuracy"])
+              optimizer='adam')
 
-for x in range(100):
-    int = random.randint(2,123)
-
-    # data
-    test = tf.keras.preprocessing.image_dataset_from_directory(
-      "/Users/***/Desktop/training",
-      labels="inferred",
-      label_mode="categorical",
-      color_mode="rgb",
-      batch_size=32,
-      image_size=(224, 224),
-      shuffle=True,
-      seed=int,
-      interpolation="bilinear",
-      follow_links=False,
-      crop_to_aspect_ratio=True
-    )
-   
-    val = tf.keras.preprocessing.image_dataset_from_directory(
-      "/Users/***/Desktop/validation",
-      labels="inferred",
-      label_mode="categorical",
-      color_mode="rgb",
-      batch_size=32,
-      image_size=(224, 224),
-      shuffle=True,
-      seed=int,
-      interpolation="bilinear",
-      follow_links=False,
-      crop_to_aspect_ratio=True
-    )
-   
-    H = model.fit(test,
-                  validation_data=val,
-                  epochs=1,
-                  shuffle=True,
-                  verbose=1,
-                  callbacks=[mc,tb,es])
+H = model.fit(test,
+              epochs=100,
+              shuffle=True,
+              verbose=1,
+              callbacks=[mc,es,tb])
