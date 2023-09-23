@@ -29,7 +29,7 @@ from keras.initializers import glorot_uniform
 
 # Creating test data generator using image_dataset_from_directory function
 test = image_dataset_from_directory(
-	"/Users/Emma/Desktop/training",
+	"training_data_set",
   labels="inferred",
   label_mode="categorical",
   color_mode="rgb",
@@ -44,7 +44,7 @@ test = image_dataset_from_directory(
 
 # Creating validation data generator using image_dataset_from_directory function
 val = tf.keras.preprocessing.image_dataset_from_directory(
-  "/Users/Emma/Desktop/validation",
+  "validation_data_set",
   labels="inferred",
   label_mode="categorical",
   color_mode="rgb",
@@ -59,7 +59,7 @@ val = tf.keras.preprocessing.image_dataset_from_directory(
 
 # Model Checkpoint
 mc = tf.keras.callbacks.ModelCheckpoint(
-    filepath="/Users/Emma/Desktop/epoch-data/checkpoint",
+    filepath="epoch_data_checkpoint",
     monitor="val_loss",
     verbose=1,
     save_best_only=True,
@@ -94,12 +94,9 @@ es = tf.keras.callbacks.EarlyStopping(
     restore_best_weights=True
 )
 
-# Creating a Poisson loss function for this model
-tf.keras.losses.Poisson(reduction="auto", name="poisson")
-
 # Creating a TensorBoard callback for visualizing training progress
 tb = tf.keras.callbacks.TensorBoard(
-    log_dir=r"/Users/Emma/Desktop/epoch-data/tensorLog",
+    log_dir=r"tensorlog",
     histogram_freq=0,
     write_graph=True,
     write_images=True,
