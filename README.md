@@ -1,7 +1,7 @@
 # Vector-Borne Disease Vector Identification Using Neural Networks
 Vector-borne diseases are responsible for over 700,000 deaths annually, accounting for more than 17% of all infectious diseases. This project leverages image recognition through Neural Networks to identify harmful vectors, such as insects and arachnids, that may carry diseases. By recognizing key morphological features of these vectors, we can differentiate between disease-carrying species and non-harmful animals.
 
-### Project Overview:
+### Project Overview:
 The goal of this project is to accurately identify different genera of disease-carrying vectors (e.g., mosquitoes, ticks, and kissing bugs) based on visual features. For example, distinguishing an Anopheles mosquito (known for its characteristic striped body) from a common mosquito (which typically has a plain brown body). This project utilizes neural networks to analyze images and classify various species of disease vectors, enabling quicker detection and response to potential disease outbreaks.
 
 ### Trained Animals/Species:
@@ -18,7 +18,7 @@ The neural network is trained to identify and classify the following vectors:
 2. Anatomical Positioning: Analyzing the positioning and structure of body parts to distinguish between species.
 3. Comparative Analysis: Contrast between vectors and non-harmful animals based on visual characteristics.
 
-### Tools & Libraries Used:
+### Tools & Libraries Used:
 This project is implemented in Python and utilizes the following libraries:
 - TensorFlow and Keras: For building and training the neural network models.
 - NumPy: For numerical operations and data manipulation.
