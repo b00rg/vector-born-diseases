@@ -1,15 +1,34 @@
-# vector-born-diseases
+# Vector-Borne Disease Vector Identification Using Neural Networks
+Vector-borne diseases are responsible for over 700,000 deaths annually, accounting for more than 17% of all infectious diseases. This project leverages image recognition through Neural Networks to identify harmful vectors, such as insects and arachnids, that may carry diseases. By recognizing key morphological features of these vectors, we can differentiate between disease-carrying species and non-harmful animals.
 
-Vector-borne diseases cause more than 700,000 deaths annually, and account for more than 17% of all infectious diseases. 
+### Project Overview:
+The goal of this project is to accurately identify different genera of disease-carrying vectors (e.g., mosquitoes, ticks, and kissing bugs) based on visual features. For example, distinguishing an Anopheles mosquito (known for its characteristic striped body) from a common mosquito (which typically has a plain brown body). This project utilizes neural networks to analyze images and classify various species of disease vectors, enabling quicker detection and response to potential disease outbreaks.
 
-My project aims to use image recognition through Neural Networks to correctly identify harmful vectors (i.e. insects/arachnids) that may carry disease by identifying key features associated with different genera of vector carries and comparing/contrasting against animals that do not carry disease. For example, an anopheles mosquito has its characteristic striped body compared to a common mosquito, which has a stereotypical plain brown body. It also examines positioning of the body and anatomy that differ from other types of animals.
+### Trained Animals/Species:
+The neural network is trained to identify and classify the following vectors:
+1. Anopheles mosquito
+2. Aedes mosquito
+3. Culex mosquito
+4. Various genera of ticks (including Lone Star tick and Black-legged tick)
+5. Blackfly
+6. Triatoma (also known as the kissing bug)
 
-Animals trained on include:
-* Anopheles mosquito
-* Aedes mosquito
-* Culex mosquito
-* Various genera of ticks (including lone star tick and blacklegged tick)
-* Blackfly
-* Triatoma (a.k.a. kissing bug)
+### Key Features Recognized:
+1. Body Morphology: Identifying characteristic body markings, such as striped patterns in Anopheles mosquitoes.
+2. Anatomical Positioning: Analyzing the positioning and structure of body parts to distinguish between species.
+3. Comparative Analysis: Contrast between vectors and non-harmful animals based on visual characteristics.
 
-Code is written in python using tensorflow, keras, numpy, skimage, and PIL libraries.
+### Tools & Libraries Used:
+This project is implemented in Python and utilizes the following libraries:
+- TensorFlow and Keras: For building and training the neural network models.
+- NumPy: For numerical operations and data manipulation.
+- skimage: For image processing and feature extraction.
+- PIL (Python Imaging Library): For handling image input/output and augmentation.
+- Web Scraping: To gather large datasets of vector images for training.
+- Image Augmentation: To enhance the dataset and increase model robustness.
+
+### How It Works:
+1. Data Collection: Web scraping techniques are employed to gather large datasets of vector and non-vector images.
+2. Data Preprocessing: Images are processed and augmented to improve the model's ability to generalize.
+3. Model Training: A convolutional neural network (CNN) is used to train the model to recognize distinguishing features of different vectors.
+4. Prediction & Classification: The trained model classifies incoming images as either harmful vectors or non-harmful animals.
