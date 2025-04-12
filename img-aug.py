@@ -1,15 +1,10 @@
 import os
 import random
-from scipy import ndarray
 import numpy as np
-import skimage as sk
-from skimage import io, exposure, transform, util
-from skimage.transform import warp, AffineTransform, ProjectiveTransform
-from skimage.exposure import equalize_adapthist, equalize_hist, rescale_intensity, adjust_gamma, adjust_log, adjust_sigmoid
-from skimage.filters import gaussian, median
-from skimage.util import random_noise
-from PIL import Image, ImageFilter
 import glob
+from skimage import exposure, transform, util
+from skimage.exposure import adjust_gamma, adjust_log, adjust_sigmoid
+from PIL import Image, ImageFilter
 
 old_folder = r"C:#path"
 new_folder = r"C:#path\%s"
