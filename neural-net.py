@@ -1,31 +1,13 @@
-import keras
-from tensorflow.keras.preprocessing import image_dataset_from_directory
-from numpy import asarray,save
 import tensorflow as tf
-from keras.preprocessing.image import ImageDataGenerator
-from keras import backend as K
-import keras
-from keras.models import Sequential, Model,load_model
-from keras.callbacks import EarlyStopping,ModelCheckpoint
-from keras.layers import Input, Add, Dense, Activation, ZeroPadding2D, BatchNormalization, Flatten, Conv2D, AveragePooling2D, MaxPooling2D, GlobalMaxPooling2D,MaxPool2D
-from keras.preprocessing import image
-from keras.initializers import glorot_uniform
 from tensorflow.keras.preprocessing import image_dataset_from_directory
-from numpy import asarray,save
+from keras.models import Sequential, Model, load_model
 from keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard
-from keras.models import load_model
-import tensorflow as tf
-import cv2
-import numpy as np
-import os
-from keras.preprocessing.image import ImageDataGenerator
-import tensorflow.keras.backend as K
-import keras
-from keras.models import Sequential, Model,load_model
-from keras.callbacks import EarlyStopping,ModelCheckpoint
-from keras.layers import Input, Add, Dense, Activation, ZeroPadding2D, BatchNormalization, Flatten, Conv2D, AveragePooling2D, MaxPooling2D, GlobalMaxPooling2D,MaxPool2D
-from keras.preprocessing import image
+from keras.layers import Input, Add, Dense, Activation, ZeroPadding2D, BatchNormalization, Flatten, Conv2D, AveragePooling2D, MaxPooling2D, GlobalMaxPooling2D, MaxPool2D
+from keras.preprocessing.image import ImageDataGenerator, image
 from keras.initializers import glorot_uniform
+import numpy as np
+import cv2
+import os
 
 # Creating test data generator using image_dataset_from_directory function
 test = image_dataset_from_directory(
